@@ -16,13 +16,24 @@ function Products(props) {
 }
 
 export async function getStaticProps() {
+  console.log("Regenerate");
   const filePath = path.join(process.cwd(), "data", "dummy.json");
   const data = await fs.readFile(filePath);
   const productData = JSON.parse(data);
+
+  if (productData.products.length === 0) {
+    return {
+      redirect: {
+        destination: '/'
+      }
+    }
+  }
+
   return {
     props: {
       products: productData.products,
     },
+    revalidate: 10
   };
 }
 
