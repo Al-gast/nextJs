@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styles from "../styles/sales.module.css"
 
 function SalesPage(props) {
   const [data, setData] = useState(props.sales);
@@ -26,11 +27,13 @@ function SalesPage(props) {
 
   return (
     <>
-      {data.map((sale) => (
-        <ul key={sale.id}>
-          {sale.username} - {sale.volume}
-        </ul>
-      ))}
+      <ul className={styles["list-styling"]}>
+        {data.map((sale) => (
+          <li key={sale.id} className={styles.red}>
+            {sale.username} - {sale.volume}
+          </li>
+        ))}
+      </ul>
     </>
   );
 }

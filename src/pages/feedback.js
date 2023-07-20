@@ -1,8 +1,17 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { buildFeedbackPath, extractFeedback} from "./api/feedback";
 
-function Feedback() {
+function Feedback(props) {
+  const [feedbackItems, setFeedbackItems] = useState(props.feedbackItems)
   const emailInputRef = useRef();
   const feedbackInputRef = useRef();
+
+  const loadFeedbackHandler = () => {
+    fetch("http://localhost:3000/api/feedback")
+      .then((response) => response.json())
+      .then((data) => setFeedbackItems(data.feedback));
+  }
+
   const submitFormHandler = (e) => {
     e.preventDefault();
     const enteredEmail = emailInputRef.current.value;
@@ -21,7 +30,10 @@ function Feedback() {
     })
       .then((response) => response.json())
       .then((data) => console.log(data));
+      loadFeedbackHandler()
+    alert("penambahan data succes")
   };
+
   return (
     <>
       <h1>Form Feedback</h1>
@@ -36,8 +48,26 @@ function Feedback() {
         </div>
         <button onClick={submitFormHandler}>Send Feedback</button>
       </form>
+      <hr />
+      {/* <button onClick={loadFeedbackHandler}>Load Feedback</button> */}
+      <ul>
+        {feedbackItems.map((item) => (
+          <li key={item.id}>{item.feedback}</li>
+        ))}
+      </ul>
     </>
   );
+}
+
+export async function getStaticProps() {
+  const filePath = buildFeedbackPath()
+  const data = extractFeedback(filePath)
+
+  return {
+    props: {
+      feedbackItems: data
+    }
+  }
 }
 
 export default Feedback;

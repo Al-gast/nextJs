@@ -5,6 +5,7 @@ import process from "process";
 
 function Products(props) {
   const { products } = props;
+  console.log(products, "products");
   return (
     <div>
       <h1>Ini adalah product page</h1>
@@ -37,7 +38,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      products: productData.products,
+      products: productData.products
     },
     revalidate: 10
   };
